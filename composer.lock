@@ -1,0 +1,68 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "ab759cbd5dd5cda85f897f4964242981",
+    "packages": [
+        {
+            "name": "electrolinux/phpquery",
+            "version": "0.9.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/electrolinux/phpquery.git",
+                "reference": "90029e2acffebebdb6e309509c778fe34e8028ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/electrolinux/phpquery/zipball/90029e2acffebebdb6e309509c778fe34e8028ba",
+                "reference": "90029e2acffebebdb6e309509c778fe34e8028ba",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "phpQuery/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "didier Belot",
+                    "homepage": "https://github.com/electrolinux/phpquery",
+                    "role": "Packager, maintainer"
+                },
+                {
+                    "name": "Tobiasz Cudnik",
+                    "email": "tobiasz.cudnik@gmail.com",
+                    "homepage": "https://github.com/TobiaszCudnik",
+                    "role": "Developer"
+                }
+            ],
+            "description": "phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model (DOM) API based on jQuery JavaScript Library",
+            "homepage": "http://code.google.com/p/phpquery/",
+            "support": {
+                "source": "https://github.com/electrolinux/phpquery/tree/0.9.7"
+            },
+            "time": "2023-05-02T18:27:16+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "ext-curl": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}
