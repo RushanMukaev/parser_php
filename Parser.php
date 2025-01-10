@@ -22,10 +22,10 @@ class Parser {
             CURLOPT_COOKIEJAR => $this->cookieFile,
             CURLOPT_REFERER => $this->baseUrl,
             CURLOPT_HTTPHEADER => [
-                'Accept: text/html,application/xhtml+xml,application/xml',
+                'Accept: /',
                 'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Cache-Control: no-cache',
-                'Connection: keep-alive'
+                'Origin: https://www.autozap.ru',
+                'Content-Type: text/plain'
             ]
         ]);
     }
@@ -36,8 +36,15 @@ class Parser {
         }
 
         try {
+            // Получаем основную страницу и находим форму поиска
+            $html = $this->makeRequest('/');
+            $doc = phpQuery::newDocument($html);
+            $searchFormLink = $doc->find('#search_form_c')->attr('action');
+            $searchAttr = $doc->find('#inp_code1')->attr('name');
 
-            $html = $this->makeRequest("/goods?code=" . urlencode($searchQuery));
+            // отправляем запрос на поиск по артикулу
+            curl_setopt($this->ch, CURLOPT_POST, true);
+            $html = $this->makeRequest($searchFormLink . "?" . $searchAttr . "=" . urlencode($searchQuery));
             $doc = phpQuery::newDocument($html);
 
             // Проверяем наличие нескольких производителей
@@ -135,7 +142,7 @@ class Parser {
 // Использование
 try {
     $searcher = new Parser();
-    $results = $searcher->searchProducts('17177');
+    $results = $searcher->searchProducts('OC264');
     print_r($results);
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
