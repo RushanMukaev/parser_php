@@ -15,18 +15,10 @@ class Parser {
         curl_setopt_array($this->ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_USERAGENT => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
             CURLOPT_COOKIEFILE => $this->cookieFile,
             CURLOPT_COOKIEJAR => $this->cookieFile,
-            CURLOPT_REFERER => $this->baseUrl,
-            CURLOPT_HTTPHEADER => [
-                'Accept: /',
-                'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Origin: https://www.autozap.ru',
-                'Content-Type: text/plain'
-            ]
+            CURLOPT_REFERER => $this->baseUrl
         ]);
     }
 
@@ -37,13 +29,13 @@ class Parser {
 
         try {
             // Получаем основную страницу и находим форму поиска
+            // Можно этот блок и убрать, его использовал для того что бы найти ссылку на страницу поиска
             $html = $this->makeRequest('/');
             $doc = phpQuery::newDocument($html);
             $searchFormLink = $doc->find('#search_form_c')->attr('action');
             $searchAttr = $doc->find('#inp_code1')->attr('name');
 
             // отправляем запрос на поиск по артикулу
-            curl_setopt($this->ch, CURLOPT_POST, true);
             $html = $this->makeRequest($searchFormLink . "?" . $searchAttr . "=" . urlencode($searchQuery));
             $doc = phpQuery::newDocument($html);
 
@@ -66,8 +58,6 @@ class Parser {
     }
 
     private function makeRequest($url) {
-        // Добавляем случайную задержку
-        usleep(rand(500000, 1500000));
 
         $url = $this->baseUrl . $url;
         curl_setopt($this->ch, CURLOPT_URL, $url);
@@ -107,7 +97,7 @@ class Parser {
 
             $result = [
                 'name' => $nameItems,
-                'price' => $this->cleanPrice($pq->find('td.price span:first')->text()),
+                'price' => $this->cleanPrice($pq->find('input[type="hidden"][id^="ecomPrice"]')->attr('value')),
                 'article' => $articleItems,
                 'brand' => $brandItems,
                 'count' => trim($pq->find('.storehouse span')->text()),
@@ -141,8 +131,8 @@ class Parser {
 
 // Использование
 try {
-    $searcher = new Parser();
-    $results = $searcher->searchProducts('OC264');
+    $parser = new Parser();
+    $results = $parser->searchProducts('GIR01009');
     print_r($results);
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
